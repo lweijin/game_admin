@@ -1,0 +1,52 @@
+@charset "utf-8";
+/* CSS Document */
+
+#page {
+	margin: auto;
+	height: 20px;
+	width: 100%;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 12px;
+}
+#page ul {
+	height: 20px;
+	width: auto;
+	clear: none;
+	float: none;
+	margin: 0px;
+	padding: 0px;
+}
+#page ul li {
+	float: center;
+	display: inline;
+	margin-top: 0px;
+	margin-right: 2px;
+	margin-left: 2px;
+	text-align: center;
+	height: 20px;
+	width: auto;
+	padding: 0px;
+	margin-bottom: 0px;
+}
+#page ul li a,#page ul li span{
+	line-height: 18px;
+	height: 18px;
+	padding-right: 5px;
+	padding-left: 5px;
+	color: #666;
+	text-decoration: none;
+	border: 1px solid #eee;
+	width: auto;
+	margin: 0px;
+	float: center;
+	padding-top: 0px;
+	padding-bottom: 0px;
+}
+#page ul li a:hover {
+	color: #FFF;
+	background-color: #666;
+}
+#page ul li span{
+	color: #FFF;
+	background-color: #666;
+}
