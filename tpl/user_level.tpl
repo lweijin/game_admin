@@ -63,8 +63,8 @@
                         <td align="center">{# $item.user_id #}</td>
                         <td align="center">{# $item.user_name #}</td>
                         <td align="center">
-                            <a href="?command=level&act=edit&user_id={# $item.user_id #}">修改</a>&nbsp;|&nbsp;
-                            <a href="?command=level&act=del&user_id={# $item.user_id #}" onclick="return confirm('您确定要删除此角色吗？')">删除</a>
+                            <a href="?command=level&act=edit_user_level&user_id={# $item.user_id #}">修改</a>&nbsp;|&nbsp;
+                            <a href="?command=level&act=del_user_level&user_id={# $item.user_id #}" onclick="return confirm('您确定要删除此角色吗？')">删除</a>
                         </td>
                     </tr>
                     {# /foreach #}

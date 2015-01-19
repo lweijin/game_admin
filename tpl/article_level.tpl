@@ -42,7 +42,7 @@
             url = '?command=level&act=save_article_edit&tid='+tid+'&name='+name+'&key='+key+'&id='+id;
             break;
             case 'del':
-            url = '?act=article_del&id='+id;
+            url = '?command=level&act=article_del&id='+id;
             break;
         }
         window.location.href = url;

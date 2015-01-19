@@ -25,6 +25,12 @@ class level extends CObject
 			case 'article_del':
 				$this->del_article_level();
 				break;
+			case 'edit_user_level':
+				$this->edit_user_level();
+				break;
+			case 'save_edit_user_level':
+				$this->save_edit_user_level();
+				break;
 			default:
 				$this->show_article();
 				break;
@@ -48,7 +54,7 @@ class level extends CObject
 
 	public function select_all_user()
 	{
-		$sql = "select user_id,user_name,user_level from user_title_level ";
+		$sql = "SELECT user_id,user_name,user_level from user_title_level GROUP BY user_id HAVING COUNT(*) > 1";
 		return $this->SQL->fetch_all($sql);
 	}
 	
@@ -153,6 +159,8 @@ class level extends CObject
 	{
 		if_has_level("level_del");
 		
+		$sql = "delete from user_title_level where user_level = '".get_param('id')."'";
+		$ret = $this->SQL->execute($sql);
 		$sql = "delete from title_level where id = '".get_param('id')."'";
 		$ret = $this->SQL->execute($sql);
 		if($ret)
@@ -161,4 +169,79 @@ class level extends CObject
 			$message = "修改权限失败！";
 		go_back($message);
 	}
+
+	private function edit_user_level()
+	{
+		if_has_level('user_level_edit');
+		$user_id = get_param('user_id');
+		$sql = "select * from user_title_level where user_id = $user_id";
+		$user = $this->SQL->fetch_all($sql);
+
+		foreach ($user as $key => $value) {
+			$user_level[$value['user_level']] = true;
+			$user_info['user_id'] = $value['user_id'];
+			$user_info['user_name'] = $value['user_name'];
+		}
+
+		$article = new article();		
+		$article_row = $article->select_article();
+		$level_row = $this->select_level();
+		
+		$this->TPL->assign("act","save_edit_user_level");
+		$this->TPL->assign("user",$user_info);
+		$this->TPL->assign("article_row",$article_row);
+		$this->TPL->assign("level_row",$level_row);
+		$this->TPL->assign("role_level",$user_level);
+		$this->TPL->assign("website_name",'新增角色权限');
+		$this->TPL->assign("man_title_name",'角色权限');
+		$this->show_page("edit_user_level");
+	}
+
+	private function save_edit_user_level()
+	{
+		if_has_level('user_level_edit');
+		$level = get_param('level');
+		$user_id = get_param('user_id');
+		$user_name = get_param('user_name');
+		
+		$sql = "select user_level from user_title_level where user_id = $user_id";
+		$old_level = $this->SQL->fetch_all($sql);
+		$del = '';
+		foreach ($old_level as $key => $value) {
+			if (!isset($level[$value['user_level']])) {
+				if (empty($del)) {
+					$del .= $value['user_level'];
+				}else{
+					$del = $del . ',' . $value['user_level'];
+				}
+			}
+		}
+
+		if (!empty($del)) {
+			# code...
+			$del = "delete from user_title_level where user_id = $user_id and user_level in ($del)";
+			$this->SQL->execute($del);
+		}
+
+		$str = '';
+		foreach ($level as $key => $value) {
+			if (empty($str)) {
+				$str .= "($user_id,$key,'$user_name')";
+			}else{
+				$str .= ",($user_id,$key,'$user_name')";
+			}
+			
+		}
+		$sql = "replace into user_title_level(user_id,user_level,user_name) values $str";
+		$ret = $this->SQL->execute($sql);
+
+		if($ret)
+		{
+			$message = "修改成功！";
+		}
+		else
+			$message = "修改失败！";
+		go_back($message);
+	}
+
 }
