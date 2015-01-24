@@ -65,7 +65,6 @@ class level extends CObject
 		$user_level['edit'] = get_level('level_edit'); 
 		$user_level['del'] = get_level('level_del');
 		
-		require_once(ROOT_DIR."/action/article.class.php");
 		$art = new article();
 		$row = $art->select_article();
 		

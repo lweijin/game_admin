@@ -1,6 +1,6 @@
 <?php
 	session_start(); 
-	require_once("include/include.php");      
+	require_once("include/include.php");
 	try{
 		check_login();
 		$index = new index();  //$_REQUEST
