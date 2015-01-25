@@ -23,15 +23,45 @@
 	<script type="text/javascript">
 		function Edit(element)
 		{
-			var old_html = element.innerHTML;
-			var new_obj = document.createElement('input');
-			new_obj.type = 'text';
-			new_obj.onblur = function(){
-				element.innerHTML = this.value ? this.value :old_html;
-			}
-			element.innerHTML = '';
-			element.appendChild(new_obj);
-			element.trigger("focus").trigger("select");;
+            var tdIns = $(element);   
+
+            if ( tdIns.children("input").length>0 ){ return false; }          
+
+            var inputIns = $("<input type='text'/>"); //需要插入的输入框代码   
+            var text = $(element).html();           
+
+            inputIns.width(tdIns.width()); //设置input与td宽度一致   
+            inputIns.val(tdIns.html()); //将本来单元格td内容copy到插入的文本框input中   
+            tdIns.html(""); //删除原来单元格td内容   
+            inputIns.appendTo(tdIns).focus().select(); //将需要插入的输入框代码插入dom节点中   
+            inputIns.click(function(){ 
+                return false;
+            });  
+            inputIns.keyup(function(event){  
+                //1.判断是否回车按下   
+                //结局不同浏览器获取时间的差异   
+                var myEvent = event || window.event;  
+                var key = myEvent.keyCode;  
+                if(key == 13){
+                	var inputNode = $(this);
+                	//1.保存当前文本框的内容
+                	var inputText = inputNode.val();  
+                	//2.清空td里面的内容
+                	$(element).html(inputText);
+                	console.log(this.name);
+                	var s = $("#save")
+                	s[0][1].value = "id";
+                	s[0][2].value = "k";
+                	s[0][3].value = inputText;
+                	document.getElementById("save").submit();
+                }  
+            });  
+            //处理Enter和Esc事件   
+            inputIns.blur(function(){
+                var inputText = $(element).val();  
+                tdIns.html(inputText);  
+                tdIns.html(text);   
+            });  
 		}
 	</script>
 </head>
@@ -77,12 +107,12 @@
 					</tr>
 					{# foreach key=key item=gateway from=$gateway_list #}
 					<tr bgcolor="#FFFFFF" align="left">
-						<td align="center" ondblclick="Edit(this)">{# $gateway.gateway_id #}</td>
-						<td align="center" ondblclick="Edit(this)">{# $gateway.gateway_name #}</td>
-						<td align="center" ondblclick="Edit(this)">{# $gateway.url #}</td>
-						<td align="center" ondblclick="Edit(this)">{# $gateway.io_port #}</td>
-						<td align="center" ondblclick="Edit(this)">{# $gateway.http_port #}</td>
-						<td align="center" ondblclick="Edit(this)">{# $gateway.srv_port #}</td>
+						<td align="center" ondblclick="Edit(this)" name="gateway_id">{# $gateway.gateway_id #}</td>
+						<td align="center" ondblclick="Edit(this)" name="gateway_name">{# $gateway.gateway_name #}</td>
+						<td align="center" ondblclick="Edit(this)" name="url">{# $gateway.url #}</td>
+						<td align="center" ondblclick="Edit(this)" name="io_port">{# $gateway.io_port #}</td>
+						<td align="center" ondblclick="Edit(this)" name="http_port">{# $gateway.http_port #}</td>
+						<td align="center" ondblclick="Edit(this)" name="srv_port">{# $gateway.srv_port #}</td>
 						<form>
 							<td align="center">
 								<input type="hidden" name="command" value="{# $command#}" />
@@ -112,6 +142,12 @@
 					<tr bgcolor="#FFFFFF">
 						<td height="35px" align="center" colspan="12">{#$pageShow#}</td>
 					</tr>
+					<form id="save">
+						<input type="hidden" name="command" value="{# $command#}" />
+						<input type="hidden" name="gateway_id" value="dvx" class="gateway_id" />
+						<input type="hidden" name="k" value="dvx" class="gateway_id" />
+						<input type="hidden" name="v" value="dvx" class="gateway_id" />
+					</form>
 				</table>
 			</td>
 			<td background="images/mail_rightbg.gif">&nbsp;</td>

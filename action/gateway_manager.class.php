@@ -18,8 +18,8 @@ class gateway_manager extends CObject
 				$this->shot_down();
 				break;
 			case 'edit':
-				$this->edit();
-				break;
+				//$this->edit();
+				//break;
 			default:
 				$this->show();
 				break;
@@ -28,6 +28,7 @@ class gateway_manager extends CObject
 
 	private function show()
 	{
+		var_dump($_REQUEST);
 		if_has_level('gateway_manager');
 		$sql = "select * from gateway_list";
 		$gateway_list = $this->SQL->fetch_all($sql);
