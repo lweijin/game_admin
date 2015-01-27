@@ -48,11 +48,9 @@
                 	var inputText = inputNode.val();  
                 	//2.清空td里面的内容
                 	$(element).html(inputText);
-                	console.log(this.name);
-                	var s = $("#save")
-                	s[0][1].value = "id";
-                	s[0][2].value = "k";
-                	s[0][3].value = inputText;
+                	$("#save")[0][1].value = $(element).parent().get(0).cells[0].innerHTML;
+                	$("#save")[0][2].value = $(element).get(0).attributes["name"].value;
+                	$("#save")[0][3].value = inputText;
                 	document.getElementById("save").submit();
                 }  
             });  
@@ -101,7 +99,6 @@
 						<th class="left_txt2" width="11%">io端口</th>
 						<th class="left_txt2" width="11%">http端口</th>
 						<th class="left_txt2" width="11%">srv端口</th>
-						<th class="left_txt2" width="11%">编辑</th>
 						<th class="left_txt2" width="11%">热更新</th>
 						<th class="left_txt2" width="11%">关服</th>
 					</tr>
@@ -109,18 +106,10 @@
 					<tr bgcolor="#FFFFFF" align="left">
 						<td align="center" ondblclick="Edit(this)" name="gateway_id">{# $gateway.gateway_id #}</td>
 						<td align="center" ondblclick="Edit(this)" name="gateway_name">{# $gateway.gateway_name #}</td>
-						<td align="center" ondblclick="Edit(this)" name="url">{# $gateway.url #}</td>
+						<td align="center" ondblclick="Edit(this)" name="host">{# $gateway.host #}</td>
 						<td align="center" ondblclick="Edit(this)" name="io_port">{# $gateway.io_port #}</td>
 						<td align="center" ondblclick="Edit(this)" name="http_port">{# $gateway.http_port #}</td>
 						<td align="center" ondblclick="Edit(this)" name="srv_port">{# $gateway.srv_port #}</td>
-						<form>
-							<td align="center">
-								<input type="hidden" name="command" value="{# $command#}" />
-								<input type="hidden" name="act" value="edit" />
-								<input type="hidden" name="gateway_id" value="{# $gateway.gateway_id#}" />
-								<input type="submit" value="编辑" />
-							</td>
-						</form>
 						<form>
 							<td align="center">
 								<input type="hidden" name="command" value="{# $command#}" />
@@ -144,9 +133,10 @@
 					</tr>
 					<form id="save">
 						<input type="hidden" name="command" value="{# $command#}" />
-						<input type="hidden" name="gateway_id" value="dvx" class="gateway_id" />
-						<input type="hidden" name="k" value="dvx" class="gateway_id" />
-						<input type="hidden" name="v" value="dvx" class="gateway_id" />
+						<input type="hidden" name="gateway_id" value=""/>
+						<input type="hidden" name="k" value=""/>
+						<input type="hidden" name="v" value=""/>
+						<input type="hidden" name="act" value="edit"/>
 					</form>
 				</table>
 			</td>

@@ -10,10 +10,49 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2015-01-17 17:39:51
+Date: 2015-01-27 19:09:09
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for gateway_list
+-- ----------------------------
+DROP TABLE IF EXISTS `gateway_list`;
+CREATE TABLE `gateway_list` (
+  `gateway_id` int(11) NOT NULL,
+  `gateway_name` varchar(255) DEFAULT NULL,
+  `host` varchar(255) DEFAULT NULL,
+  `http_port` int(255) DEFAULT NULL,
+  `io_port` int(255) DEFAULT NULL,
+  `srv_port` int(255) DEFAULT NULL,
+  PRIMARY KEY (`gateway_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of gateway_list
+-- ----------------------------
+INSERT INTO `gateway_list` VALUES ('1', 'sfs', '127.0.0.1', '7778', '7776', '7779');
+
+-- ----------------------------
+-- Table structure for server_list
+-- ----------------------------
+DROP TABLE IF EXISTS `server_list`;
+CREATE TABLE `server_list` (
+  `server_id` int(11) DEFAULT NULL,
+  `server_name` varchar(255) DEFAULT NULL,
+  `host` varchar(255) DEFAULT NULL,
+  `io_port` varchar(255) DEFAULT NULL,
+  `http_port` varchar(255) DEFAULT NULL,
+  `online_num` int(11) DEFAULT NULL,
+  `gateway_id` int(11) DEFAULT NULL,
+  `update_time` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of server_list
+-- ----------------------------
+INSERT INTO `server_list` VALUES ('1', 'xxoo', 'www.rlgame.com', '8887', '8888', '0', '1', '2015-01-24 17:33:51');
 
 -- ----------------------------
 -- Table structure for title
@@ -29,7 +68,7 @@ CREATE TABLE `title` (
   `root_id` int(11) DEFAULT NULL,
   `show_left` tinyint(255) DEFAULT NULL,
   PRIMARY KEY (`title_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of title
@@ -39,6 +78,8 @@ INSERT INTO `title` VALUES ('2', '模块管理', '2', '1', '0', 'command=article
 INSERT INTO `title` VALUES ('3', '权限管理', '2', '1', '2', '', '1', '1');
 INSERT INTO `title` VALUES ('4', '模块权限', '3', '3', '0', 'command=level', '1', '1');
 INSERT INTO `title` VALUES ('5', '用户权限', '3', '3', '0', 'command=level&act=user', '1', '1');
+INSERT INTO `title` VALUES ('6', '游戏管理', '1', '0', '1', '', '0', '1');
+INSERT INTO `title` VALUES ('7', '服务器管理', '2', '6', '0', 'command=server_manager', '6', '1');
 
 -- ----------------------------
 -- Table structure for title_level
@@ -52,7 +93,7 @@ CREATE TABLE `title_level` (
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `level_key` (`level_key`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of title_level
@@ -68,8 +109,10 @@ INSERT INTO `title_level` VALUES ('9', '4', 'level_edit', '编辑', '2015-01-16 
 INSERT INTO `title_level` VALUES ('10', '4', 'level_del', '删除', '2015-01-16 18:07:26');
 INSERT INTO `title_level` VALUES ('11', '5', 'user_level', '显示', '2015-01-16 20:26:28');
 INSERT INTO `title_level` VALUES ('12', '5', 'user_level_edit', '编辑', '2015-01-16 20:28:56');
-INSERT INTO `title_level` VALUES ('13', '5', 'user_level_add', '新增', '2015-01-16 20:29:06');
-INSERT INTO `title_level` VALUES ('14', '5', 'user_level_del', '删除', '2015-01-16 20:29:16');
+INSERT INTO `title_level` VALUES ('15', '6', 'game_manager', '显示', '2015-01-19 17:47:37');
+INSERT INTO `title_level` VALUES ('16', '7', 'server_manager', '显示', '2015-01-19 17:50:50');
+INSERT INTO `title_level` VALUES ('17', '7', 'server_manager_edit', '编辑', '2015-01-19 17:51:09');
+INSERT INTO `title_level` VALUES ('18', '7', 'gateway_manager', '网关服管理', '2015-01-24 16:25:26');
 
 -- ----------------------------
 -- Table structure for user
@@ -127,6 +170,15 @@ INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-17 10:34:31', '登
 INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-17 12:37:45', '登录<br>', '1');
 INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-17 13:25:51', '登录<br>', '1');
 INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-17 13:34:06', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-17 17:44:18', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-19 16:02:37', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-19 16:49:42', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-19 16:50:29', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-19 17:48:06', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-19 17:51:26', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-24 14:51:18', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-24 16:25:40', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-27 18:07:16', '登录<br>', '1');
 
 -- ----------------------------
 -- Table structure for user_title_level
@@ -134,8 +186,9 @@ INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-17 13:34:06', '登
 DROP TABLE IF EXISTS `user_title_level`;
 CREATE TABLE `user_title_level` (
   `user_id` int(255) NOT NULL,
-  `user_level` varchar(255) DEFAULT NULL,
+  `user_level` int(255) NOT NULL,
   `user_name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`user_id`,`user_level`),
   KEY `user_id` (`user_id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -152,6 +205,11 @@ INSERT INTO `user_title_level` VALUES ('1', '8', 'admin');
 INSERT INTO `user_title_level` VALUES ('1', '9', 'admin');
 INSERT INTO `user_title_level` VALUES ('1', '10', 'admin');
 INSERT INTO `user_title_level` VALUES ('1', '11', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '12', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '15', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '16', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '17', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '18', 'admin');
 
 -- ----------------------------
 -- Procedure structure for insert_admin_role
