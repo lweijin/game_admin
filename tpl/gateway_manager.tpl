@@ -61,6 +61,27 @@
                 tdIns.html(text);   
             });  
 		}
+
+		function add_gateway()
+		{
+			console.log("add_gateway");
+			var current_rows = document.getElementById("add_gateway").rows.length; 
+			var insert_tr = document.getElementById("add_gateway").insertRow(current_rows - 2);
+			var names = new Array("gateway_id","gateway_name","host","io_port","http_port","srv_port");
+			for (var i = 0; i < 6; i++) {
+				var insert_td = insert_tr.insertCell(i);
+				insert_td.style.textAlign="center";
+				var name = names[i];
+				insert_td.innerHTML = "<input name= 'params[" + (current_rows - 3) + "][" + name + "]'  value='' type='text' style='width: 100%;height:auto'/>";
+			};
+			//save_add.parentNode.insertBefore(tr, save_add);
+			document.getElementById("save_add").style.display = "";
+		}
+		function checkall(form)
+		{
+			console.log(form)
+			console.log(form)
+		}
 	</script>
 </head>
 <body>
@@ -84,13 +105,12 @@
 		<tr>
 			<td valign="middle" background="images/mail_leftbg.gif">&nbsp;</td>
 			<td valign="top" bgcolor="#F7F8F9" align="center">
-				<table width="100%" height="auto" border="0" cellpadding="0" cellspacing="1" class="line_table">
-					<form>
-						<tr class="item_left">
-							<td height="30" colspan="12" background="images/news-title-bg.gif">
-							</td>
-						</tr>
-					</form> 
+				<table width="100%" height="auto" border="0" cellpadding="0" cellspacing="1" class="line_table" id = "gateway_list">
+					<tr class="item_left">
+						<td height="30" colspan="12" background="images/news-title-bg.gif">
+							<input type="submit" value="添加" onclick="add_gateway()" />
+						</td>
+					</tr>
 
 					<tr bgcolor='#cccfff'>
 						<th class="left_txt2" width="11%">网关服ID</th>
@@ -128,9 +148,8 @@
 						</form>
 					</tr>
 					{# /foreach #}
-					<tr bgcolor="#FFFFFF">
-						<td height="35px" align="center" colspan="12">{#$pageShow#}</td>
-					</tr>
+					
+						
 					<form id="save">
 						<input type="hidden" name="command" value="{# $command#}" />
 						<input type="hidden" name="gateway_id" value=""/>
@@ -139,6 +158,30 @@
 						<input type="hidden" name="act" value="edit"/>
 					</form>
 				</table>
+				<form>
+					<table width="100%" height="auto" border="0" cellpadding="0" cellspacing="3" class="line_table" id = "add_gateway">
+						<tr type = "hidden">
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+							<th type = "hidden" width="11%"></th>
+						</tr>
+						<tr class="item_left" style="display:none" id = "save_add">
+							<td height="30" colspan="12" background="images/news-title-bg.gif">
+								<input type="hidden" name="command" value="{# $command#}" />
+								<input type="hidden" name="act" value="add"/>
+								<input type="submit" value="保存" onclick="checkall(this.form)"/>
+							</td>
+						</tr>
+						<tr bgcolor="#FFFFFF">
+							<td height="35px" align="center" colspan="12">{#$page_show#}</td>
+						</tr>
+					</table>
+				</form>
 			</td>
 			<td background="images/mail_rightbg.gif">&nbsp;</td>
 		</tr>

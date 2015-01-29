@@ -20,6 +20,9 @@ class gateway_manager extends CObject
 			case 'edit':
 				$this->edit();
 				break;
+			case 'add':
+				$this->add();
+				break;
 			default:
 				$this->show();
 				break;
@@ -35,6 +38,8 @@ class gateway_manager extends CObject
 		$this->TPL->assign("game_server_name",'游服管理');
 		$this->TPL->assign("gateway_name",'网关服管理');
 		$this->TPL->assign("command",'gateway_manager');
+		$page = new Page(3,1,2);
+		$this->TPL->assign("page_show",$page->EndPage(1));
 		$this->show_page("gateway_manager");
 	}
 
@@ -80,6 +85,36 @@ class gateway_manager extends CObject
 		}else{
 			go_back('更新失败','index.php&command=gateway_manager');
 		}
+	}
+
+	private function add()
+	{
+		$data = get_param("params");
+		$sql = "insert into gateway_list VALUES";
+		$sql_value = "";
+
+		foreach ($data as $key => $value) {
+			if (empty($value['gateway_id'])) {
+				continue;
+			}
+
+			$v = sprintf("('%s','%s','%s','%s','%s','%s')",$value['gateway_id'],$value['gateway_name'],$value['host'],$value['io_port'],$value['http_port'],$value['srv_port']);
+			if (empty($sql_value)) {
+				$sql_value .= $v;
+			}else{
+				$sql_value = $sql_value . "," . $v;
+			}
+		}
+		if (!empty($sql_value)) {
+			$sql .= $sql_value;
+			$ret = $this->SQL->execute($sql);
+			if ($ret) {
+				go_back('添加成功','index.php&command=gateway_manager');
+			}
+		}
+		//echo $sql;
+		
+		go_back('添加失败','index.php&command=gateway_manager');
 	}
 }
 ?>

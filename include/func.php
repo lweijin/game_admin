@@ -87,4 +87,5 @@ function get_user_level()
     }
     return false;
 }
+
 ?>
