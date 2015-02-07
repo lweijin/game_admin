@@ -14,6 +14,8 @@ require_once(ROOT_DIR."/lib/base/base.php");// 数据库单例
 require_once(ROOT_DIR."/lib/base/object.php");//smarty基础配置
 require_once(ROOT_DIR."/lib/base/curl.php");// curl
 
+require_once (ROOT_DIR."/proto/message/pb_message.php");
+
 require __DIR__.'/auto_load.php';
 if (!function_exists('spl_autoload_register')){
 	throw new RuntimeException('spl_autoload_register() not found.');
