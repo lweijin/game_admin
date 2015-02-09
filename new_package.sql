@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2015-01-27 19:09:09
+Date: 2015-02-09 16:20:57
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -32,7 +32,7 @@ CREATE TABLE `gateway_list` (
 -- ----------------------------
 -- Records of gateway_list
 -- ----------------------------
-INSERT INTO `gateway_list` VALUES ('1', 'sfs', '127.0.0.1', '7778', '7776', '7779');
+INSERT INTO `gateway_list` VALUES ('1', '001', '127.0.0.1', '7778', '7776', '7779');
 
 -- ----------------------------
 -- Table structure for server_list
@@ -52,7 +52,8 @@ CREATE TABLE `server_list` (
 -- ----------------------------
 -- Records of server_list
 -- ----------------------------
-INSERT INTO `server_list` VALUES ('1', 'xxoo', 'www.rlgame.com', '8887', '8888', '0', '1', '2015-01-24 17:33:51');
+INSERT INTO `server_list` VALUES ('1', 'xxoo', 'www.rlgame.com', '8887', '8888', '0', '1', '2015-01-31 16:47:35');
+INSERT INTO `server_list` VALUES ('-1', '离线玩家信息查询', 'www.rlgame.com', '8887', '8888', '0', '1', '2015-02-04 17:53:57');
 
 -- ----------------------------
 -- Table structure for title
@@ -68,7 +69,7 @@ CREATE TABLE `title` (
   `root_id` int(11) DEFAULT NULL,
   `show_left` tinyint(255) DEFAULT NULL,
   PRIMARY KEY (`title_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of title
@@ -78,8 +79,10 @@ INSERT INTO `title` VALUES ('2', '模块管理', '2', '1', '0', 'command=article
 INSERT INTO `title` VALUES ('3', '权限管理', '2', '1', '2', '', '1', '1');
 INSERT INTO `title` VALUES ('4', '模块权限', '3', '3', '0', 'command=level', '1', '1');
 INSERT INTO `title` VALUES ('5', '用户权限', '3', '3', '0', 'command=level&act=user', '1', '1');
-INSERT INTO `title` VALUES ('6', '游戏管理', '1', '0', '1', '', '0', '1');
+INSERT INTO `title` VALUES ('6', '游戏管理', '1', '0', '3', '', '0', '1');
 INSERT INTO `title` VALUES ('7', '服务器管理', '2', '6', '0', 'command=server_manager', '6', '1');
+INSERT INTO `title` VALUES ('8', '玩家信息查询', '2', '6', '0', 'command=game_manager', '6', '1');
+INSERT INTO `title` VALUES ('9', '日志查询', '2', '6', '0', 'command=game_manager&act=query_log', '6', '1');
 
 -- ----------------------------
 -- Table structure for title_level
@@ -93,7 +96,7 @@ CREATE TABLE `title_level` (
   `create_time` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `level_key` (`level_key`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of title_level
@@ -113,6 +116,8 @@ INSERT INTO `title_level` VALUES ('15', '6', 'game_manager', '显示', '2015-01-
 INSERT INTO `title_level` VALUES ('16', '7', 'server_manager', '显示', '2015-01-19 17:50:50');
 INSERT INTO `title_level` VALUES ('17', '7', 'server_manager_edit', '编辑', '2015-01-19 17:51:09');
 INSERT INTO `title_level` VALUES ('18', '7', 'gateway_manager', '网关服管理', '2015-01-24 16:25:26');
+INSERT INTO `title_level` VALUES ('19', '8', 'gm', '显示', '2015-02-04 17:21:41');
+INSERT INTO `title_level` VALUES ('20', '9', 'query_log', '显示', '2015-02-07 15:22:49');
 
 -- ----------------------------
 -- Table structure for user
@@ -179,6 +184,19 @@ INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-19 17:51:26', '登
 INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-24 14:51:18', '登录<br>', '1');
 INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-24 16:25:40', '登录<br>', '1');
 INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-27 18:07:16', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-27 19:43:46', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-27 20:12:18', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-29 11:11:17', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-01-31 16:40:04', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-04 17:20:34', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-04 17:21:59', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-04 17:28:30', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-05 10:19:41', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-06 18:00:11', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-07 10:53:48', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-07 14:06:11', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-07 15:23:13', '登录<br>', '1');
+INSERT INTO `user_log` VALUES ('admin', '127.0.0.1', '2015-02-09 14:20:17', '登录<br>', '1');
 
 -- ----------------------------
 -- Table structure for user_title_level
@@ -210,6 +228,8 @@ INSERT INTO `user_title_level` VALUES ('1', '15', 'admin');
 INSERT INTO `user_title_level` VALUES ('1', '16', 'admin');
 INSERT INTO `user_title_level` VALUES ('1', '17', 'admin');
 INSERT INTO `user_title_level` VALUES ('1', '18', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '19', 'admin');
+INSERT INTO `user_title_level` VALUES ('1', '20', 'admin');
 
 -- ----------------------------
 -- Procedure structure for insert_admin_role

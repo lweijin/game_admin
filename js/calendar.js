@@ -109,18 +109,20 @@ function _selectThisDay(d){
 
 function _selectThisMin(d){
 	var boxObj = d.parentNode.parentNode.parentNode;
-	console.log(boxObj.targetObj.value.substring(0, 9));
+	var timeStr = boxObj.targetObj.value.split(' ')
+	//console.log(boxObj.targetObj.value.split(' '));
 	if (boxObj.targetObj.value){
-		boxObj.targetObj.value = boxObj.targetObj.value.substring(0, 9) + " " + document.getElementById('hour').value + ":" + document.getElementById('minute').value;
+		boxObj.targetObj.value = timeStr[0] + " " + document.getElementById('hour').value + ":" + document.getElementById('minute').value;
 		//boxObj.parentNode.removeChild(boxObj);
 	}
 }
 
 function _selectThisHour(d){
 	var boxObj = d.parentNode.parentNode.parentNode;
-	console.log(boxObj.targetObj.value);
+	var timeStr = boxObj.targetObj.value.split(' ')
+	//console.log(boxObj.targetObj.value);
 	if (boxObj.targetObj.value){
-		boxObj.targetObj.value = boxObj.targetObj.value.substring(0, 9) + " " + document.getElementById('hour').value + ":" + document.getElementById('minute').value;
+		boxObj.targetObj.value = timeStr[0] + " " + document.getElementById('hour').value + ":" + document.getElementById('minute').value;
 		//boxObj.parentNode.removeChild(boxObj);
 	}
 }

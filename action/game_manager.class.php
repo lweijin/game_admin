@@ -79,7 +79,7 @@ class game_manager extends CObject
 				return;
 			}
 		}
-		echo "玩家不在线";
+		go_back('玩家不在线','index.php&command=game_manager');
 	}
 
 	private function query_user_info(){
@@ -112,9 +112,17 @@ class game_manager extends CObject
 			$where .= " and code = {$code}";
 		}
 		if (!empty($where)) {
-			$db_name = "game_db_";
-			$sql = "select * from game_log.game_db_20150124_15 where {$where}";
-			$log = $this->SQL->fetch_all($sql);
+			$db_list = $this->get_db_list($start_time,$end_time);
+			if ($db_list === false) {
+				go_back('时间区间有误','index.php&command=game_manager&act=query_log');
+			}
+			$log = array();
+			//var_dump($db_list);
+			foreach ($db_list as $key => $db_name) {
+				$sql = "select * from game_log.game_db_{$db_name} where {$where}";
+				$ret = $this->SQL->fetch_all($sql);
+				$log = array_merge($ret,$log);
+			}
 			$this->TPL->assign("log",$log);
 		}
 		$this->TPL->assign("code",$code);
@@ -122,6 +130,109 @@ class game_manager extends CObject
 		$this->TPL->assign("end_time",$end_time);
 		$this->TPL->assign("user_id",$user_id);
 		$this->show_page("query_log");
+	}
+
+	private function get_db_name($time)   //array(year,month,day,hour)
+	{
+		$str = $time['year'];
+		if (strlen($time['month']) < 2) {
+			$str = $str . '0' . $time['month'];
+		}else{
+			$str .= $time['month'];
+		}
+
+		if (strlen($time['day']) < 2) {
+			$str = $str . '0' . $time['day'];
+		}else{
+			$str .= $time['day'];
+		}
+
+		$str .= '_';
+		if (strlen($time['hour']) < 2) {
+			$str = $str . '0' . $time['hour'];
+		}else{
+			$str .= $time['hour'];
+		}
+		return $str;
+	}
+
+	private function get_db_list($start_time,$end_time){
+		if (empty($start_time) || empty($end_time)) {
+			return false;
+		}
+		$st = explode(' ', $start_time);
+		$st_date = explode('-', $st[0]);
+		$st_time = explode(':', $st[1]);
+		$et = explode(' ', $end_time);
+		$et_date = explode('-', $et[0]);
+		$et_time = explode(':', $et[1]);
+
+		if ($st_date[0] > $et_date[0]) {
+			return false;
+		}elseif ($st_date[0] == $et_date[0]) {
+			if ($st_date[1] > $et_date[1]) {
+				return false;
+			}elseif($st_date[1] == $et_date[1]){
+				if ($st_date[2] > $et_date[2]) {
+					return false;
+				}elseif($st_date[2] == $et_date[2]){
+					if ($st_time[0] > $et_time[0]) {
+						return false;
+					}elseif($st_time[0] == $et_time[0]){
+						if ($st_time[1] > $et_time[1]) {
+							return false;
+						}
+					}
+				}
+			}
+		}
+
+		$time_list = array();
+		$time_list[] = array('year' => $st_date[0],'month' => $st_date[1],'day' => $st_date[2],'hour' => $st_time[0]);
+		$time_list[] = array('year' => $et_date[0],'month' => $et_date[1],'day' => $et_date[2],'hour' => $et_time[0]);
+		for ($i=$st_date[1] + 1; $i < $et_date[1]; $i++) { 
+			for ($j=1; $j < 32; $j++) { 
+				for ($k=0; $k < 24; $k++) { 
+					$time_list[] = array('year' => $st_date[0],'month' => $i,'day' => $j,'hour' => $k);
+				}
+			}
+		}
+		if ($st_date[1] != $et_date[1]) {
+			for ($j=$st_date[2] + 1; $j < 32; $j++) { 
+				for ($k=0; $k < 24; $k++) { 
+					$time_list[] = array('year' => $st_date[0],'month' => $st_date[1],'day' => $j,'hour' => $k);
+				}
+			}
+			for ($j=$et_date[2] - 1; $j > 0; $j--) { 
+				for ($k=0; $k < 24; $k++) { 
+					$time_list[] = array('year' => $st_date[0],'month' => $et_date[1],'day' => $j,'hour' => $k);
+				}
+			}
+		}else{
+			for ($j=$st_date[2] + 1; $j < $et_date[2]; $j++) { 
+				for ($k=0; $k < 24; $k++) { 
+					$time_list[] = array('year' => $st_date[0],'month' => $et_date[1],'day' => $j,'hour' => $k);
+				}
+			}
+		}
+		if ($st_date[1] != $et_date[1] || $st_date[2] != $et_date[2]) {
+			for ($k=$st_time[0] + 1; $k < 24; $k++) { 
+				$time_list[] = array('year' => $st_date[0],'month' => $st_date[1],'day' => $st_date[2],'hour' => $k);
+			}
+			for ($k=$et_time[0] + 1; $k < 24; $k++) { 
+				$time_list[] = array('year' => $et_date[0],'month' => $et_date[1],'day' => $et_date[2],'hour' => $k);
+			}
+		}else{
+			for ($k=$st_time[0] + 1; $k < $et_time[0]; $k++) { 
+				$time_list[] = array('year' => $et_date[0],'month' => $et_date[1],'day' => $et_date[2],'hour' => $k);
+			}
+		}
+
+		$db_list = array();
+		foreach ($time_list as $key => $value) {
+			$db_list[] = $this->get_db_name($value);
+		}
+		return $db_list;
 	}
 
 	private function parse_hero_package($data)
